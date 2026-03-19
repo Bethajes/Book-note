@@ -5,11 +5,10 @@ import axios from 'axios';
 import methodOverride from "method-override";
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "mydb",
-  password: "1234",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 db.connect();
 
