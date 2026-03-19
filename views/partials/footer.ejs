@@ -1,0 +1,153 @@
+    </main>
+
+    <!-- Footer Start -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-row">
+                <!-- About Section -->
+                <div class="footer-col">
+                    <h4>About BookNest</h4>
+                    <p>Your personal digital bookshelf to organize, rate, and remember every book you've read. Never lose track of your literary journey.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="/new"><i class="fas fa-chevron-right"></i> Add New Book</a></li>
+                        <li><a href="/favorites"><i class="fas fa-chevron-right"></i> My Favorites</a></li>
+                        <li><a href="/reading-list"><i class="fas fa-chevron-right"></i> Reading List</a></li>
+                    </ul>
+                </div>
+
+                <!-- Categories -->
+                <div class="footer-col">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Fiction</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Non-Fiction</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Science Fiction</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Mystery</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Biography</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter & Contact -->
+                <div class="footer-col">
+                    <h4>Stay Updated</h4>
+                    <p>Get weekly book recommendations!</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> hello@booknest.com</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reading Stats Bar -->
+            <div class="footer-stats">
+                <div class="stat-item">
+                    <span class="stat-icon"><i class="fas fa-books"></i></span>
+                    <span class="stat-label">Total Books</span>
+                    <span class="stat-value"><%= locals.bookCount || 0 %></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><i class="fas fa-star"></i></span>
+                    <span class="stat-label">Avg Rating</span>
+                    <span class="stat-value"><%= locals.avgRating ? avgRating.toFixed(1) : '0.0' %></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><i class="fas fa-clock"></i></span>
+                    <span class="stat-label">Reading Hours</span>
+                    <span class="stat-value"><%= locals.readingHours || '0' %></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><i class="fas fa-calendar"></i></span>
+                    <span class="stat-label">This Year</span>
+                    <span class="stat-value"><%= locals.booksThisYear || '0' %></span>
+                </div>
+            </div>
+
+            <!-- Copyright Bar -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; <%= new Date().getFullYear() %> BookNest. Made with <i class="fas fa-heart" style="color: #f56565;"></i> for book lovers</p>
+                    <div class="footer-bottom-links">
+                        <a href="/privacy">Privacy</a>
+                        <a href="/terms">Terms</a>
+                        <a href="/sitemap">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navLinks.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (event) => {
+                if (navLinks && mobileMenuBtn && 
+                    !navLinks.contains(event.target) && 
+                    !mobileMenuBtn.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation to book cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.book').forEach(book => {
+            book.style.opacity = '0';
+            book.style.transform = 'translateY(20px)';
+            book.style.transition = 'all 0.5s ease';
+            observer.observe(book);
+        });
+    </script>
+</body>
+</html>

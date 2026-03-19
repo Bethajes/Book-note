@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookshelf</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 My Bookshelf</h1>
+            <p class="header-subtitle" style="color: red;">Your personal book collection</p>
+        </div>
+        
+        <div class="books-grid">
+            <% books.forEach(book => { %>
+            <div class="book">
+                <!-- Book Cover Section -->
+                <div class="book-cover">
+                    <% if (book.cover_id) { %>
+                        <img src="https://covers.openlibrary.org/b/id/<%= book.cover_id %>-M.jpg" 
+                             alt="Cover of <%= book.title %>"
+                             onerror="this.onerror=null; this.src='/images/default-cover.jpg';">
+                    <% } else { %>
+                        <div class="no-cover">a
+                            <span>📖</span>
+                            <p>No cover available</p>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <!-- Book Info Section -->
+                <div class="book-info">
+                    <h2><%= book.title %></h2>
+                    <p class="author"><strong>Author:</strong> <%= book.author %></p>
+                    
+                    <% if (book.summary) { %>
+                        <p class="summary"><strong>Summary:</strong> <%= book.summary %></p>
+                    <% } %>
+                    
+                    <p class="rating">
+                        <strong>Rating:</strong> 
+                        <span class="stars">
+                            <% if (book.rating) { %>
+                                <%= '★'.repeat(book.rating) + '☆'.repeat(5-book.rating) %>
+                                <span class="rating-number"><%= book.rating %>/5</span>
+                            <% } else { %>
+                                <span class="no-rating">Not rated yet</span>
+                            <% } %>
+                        </span>
+                    </p>
+                    
+                    <div class="actions">
+                        <a href="/books/<%= book.id %>/edit" class="edit-btn">✏️ Edit</a>
+                        <form action="/books/<%= book.id %>?_method=DELETE" method="POST" style="display:inline;" name="delete">
+                            <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this book?')">🗑️ Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+
+        <a href="/new" class="add-book">✨ Add a New Book</a>
+    </div>
+</body>
+</html>

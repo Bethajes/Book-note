@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book: <%= book.title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card edit-card">
+            <div class="form-header">
+                <h1>✏️ Edit Book</h1>
+                <p>Update the details of "<%= book.title %>"</p>
+            </div>
+
+            <form action="/books/<%= book.id %>?_method=PUT" method="POST" class="book-form">
+                <!-- Book Title -->
+                 
+                <div class="form-group">
+                    <label for="title">
+                        <span class="label-icon">📖</span>
+                        Book Title
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title"
+                        name="title" 
+                        value="<%= book.title %>" 
+                        placeholder="Enter book title..."
+                        required 
+                    />
+                </div>
+
+                <!-- Author -->
+                <div class="form-group">
+                    <label for="author">
+                        <span class="label-icon">✍️</span>
+                        Author Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="author"
+                        name="author" 
+                        value="<%= book.author %>" 
+                        placeholder="Enter author name..."
+                        required 
+                    />
+                </div>
+
+                <!-- Rating with Visual Preview -->
+                <div class="form-group">
+                    <label for="rating">
+                        <span class="label-icon">⭐</span>
+                        Rating (1-5)
+                    </label>
+                    <div class="rating-input">
+                        <input 
+                            type="number" 
+                            id="rating"
+                            name="rating" 
+                            min="1" 
+                            max="5" 
+                            step="1" 
+                            value="<%= book.rating %>"
+                            required 
+                        />
+                        <div class="rating-preview" id="ratingPreview">
+                            <span class="preview-stars">
+                                <%= '★'.repeat(book.rating) + '☆'.repeat(5-book.rating) %>
+                            </span>
+                            <span class="preview-value"><%= book.rating %>/5</span>
+                        </div>
+                    </div>
+                    <div class="rating-hint">
+                        <span onclick="setRating(1)">1 ★</span>
+                        <span onclick="setRating(2)">2 ★★</span>
+                        <span onclick="setRating(3)">3 ★★★</span>
+                        <span onclick="setRating(4)">4 ★★★★</span>
+                        <span onclick="setRating(5)">5 ★★★★★</span>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="form-group">
+                    <label for="summary">
+                        <span class="label-icon">📝</span>
+                        Book Summary
+                    </label>
+                    <textarea 
+                        id="summary"
+                        name="summary" 
+                        placeholder="Write a brief summary or your thoughts about this book..." 
+                        rows="6"
+                        required
+                    ><%= book.summary %></textarea>
+                    <div class="textarea-hint">
+                        <span id="charCount"><%= book.summary ? book.summary.length : 0 %></span>/500 characters
+                    </div>
+                </div>
+
+                <!-- Last Updated Info (Optional) -->
+                <% if (book.updatedAt) { %>
+                <div class="book-meta">
+                    <small>Last updated: <%= new Date(book.updatedAt).toLocaleDateString() %></small>
+                </div>
+                <% } %>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn update-btn">
+                        <span>💾</span>
+                        Update Book
+                    </button>
+                    <a href="/" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Character counter for textarea
+        const textarea = document.getElementById('summary');
+        const charCount = document.getElementById('charCount');
+        
+        textarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            if (count > 400) {
+                charCount.style.color = count > 500 ? '#f56565' : '#ecc94b';
+            } else {
+                charCount.style.color = '#48bb78';
+            }
+        });
+
+        // Rating preview update
+        const ratingInput = document.getElementById('rating');
+        const ratingPreview = document.getElementById('ratingPreview');
+        
+        function updateRatingPreview(value) {
+            const stars = '★'.repeat(value) + '☆'.repeat(5-value);
+            ratingPreview.innerHTML = `
+                <span class="preview-stars">${stars}</span>
+                <span class="preview-value">${value}/5</span>
+            `;
+        }
+
+        ratingInput.addEventListener('input', function() {
+            updateRatingPreview(this.value);
+        });
+
+        // Set rating from hint clicks
+        function setRating(value) {
+            ratingInput.value = value;
+            updateRatingPreview(value);
+        }
+
+        // Highlight changes (Optional)
+        const formInputs = document.querySelectorAll('input, textarea');
+        formInputs.forEach(input => {
+            const originalValue = input.value;
+            input.addEventListener('input', function() {
+                if (this.value !== originalValue) {
+                    this.classList.add('modified');
+                } else {
+                    this.classList.remove('modified');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

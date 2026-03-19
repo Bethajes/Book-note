@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a New Book 📚</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-header">
+                <h1>✨ Add a New Book</h1>
+                <p>Share your next literary adventure with your collection</p>
+            </div>
+
+            <form action="/add" method="POST" class="book-form">
+                <div class="form-group">
+                    <label for="title">
+                        <span class="label-icon">📖</span>
+                        Book Title
+                    </label>
+                    <input 
+                        type="text" 
+                        id="title"
+                        name="title" 
+                        placeholder="e.g., The Great Gatsby" 
+                        required 
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="author">
+                        <span class="label-icon">✍️</span>
+                        Author Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="author"
+                        name="author" 
+                        placeholder="e.g., F. Scott Fitzgerald" 
+                        required 
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="rating">
+                        <span class="label-icon">⭐</span>
+                        Your Rating
+                    </label>
+                    <div class="rating-input">
+                        <input 
+                            type="number" 
+                            id="rating"
+                            name="rating" 
+                            min="1" 
+                            max="5" 
+                            step="1" 
+                            required 
+                            placeholder="3"
+                        />
+                        <div class="rating-hint">
+                            <span>1 ★</span>
+                            <span>2 ★★</span>
+                            <span>3 ★★★</span>
+                            <span>4 ★★★★</span>
+                            <span>5 ★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="summary">
+                        <span class="label-icon">📝</span>
+                        Book Summary
+                    </label>
+                    <textarea 
+                        id="summary"
+                        name="summary" 
+                        placeholder="Write a brief summary or your thoughts about this book..." 
+                        rows="6"
+                        required
+                    ></textarea>
+                    <div class="textarea-hint">
+                        <span id="charCount">0</span>/500 characters
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        <span>➕</span>
+                        Add to Bookshelf
+                    </button>
+                    <a href="/" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Character counter for textarea
+        const textarea = document.getElementById('summary');
+        const charCount = document.getElementById('charCount');
+        
+        textarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            if (count > 400) {
+                charCount.style.color = count > 500 ? '#f56565' : '#ecc94b';
+            } else {
+                charCount.style.color = '#48bb78';
+            }
+        });
+    </script>
+</body>
+</html>
